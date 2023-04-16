@@ -1,0 +1,23 @@
+.container {
+  color: #333;
+  margin: 0 auto;
+  font-weight: normal;
+  letter-spacing: 0.125rem;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  margin-top: 200px;
+}
+
+.field {
+  font-size: 1.5em;
+  padding: 1em;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  border: #333 2px solid;
+  border-radius: 20px;
+}
