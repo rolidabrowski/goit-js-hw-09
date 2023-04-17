@@ -1,38 +1,35 @@
 import Notiflix from 'notiflix';
 
-const form = document.querySelector('.form');
+const formEl = document.querySelector('.form');
+
+formEl.addEventListener('submit', ev => {
+  ev.preventDefault();
+
+  const formData = new FormData(ev.target);
+  const firstDelay = parseInt(formData.get('delay'), 10);
+  const step = parseInt(formData.get('step'), 10);
+  const amount = parseInt(formData.get('amount'), 10);
+
+  for (let i = 0; i < amount; i++) {
+    createPromise(i + 1, firstDelay + i * step)
+      .then(({ position, delay }) => {
+        Notiflix.Notify.success(`Fulfilled promise ${position} in ${delay}ms`);
+      })
+      .catch(({ position, delay }) => {
+        Notiflix.Notify.failure(`Rejected promise ${position} in ${delay}ms`);
+      });
+  }
+});
 
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
-    const shouldResolve = Math.random() > 0.3;
-    if (shouldResolve) {
-      resolve({ position, delay });
-    } else {
-      reject({ position, delay });
-    }
+    setTimeout(() => {
+      const shouldResolve = Math.random() > 0.5;
+      if (shouldResolve) {
+        resolve({ position, delay });
+      } else {
+        reject({ position, delay });
+      }
+    }, delay);
   });
 }
-
-const showPromise = (amount, step, time, current = 1) => {
-  if (current > amount) return;
-  createPromise(current, time)
-    .then(({ position, delay }) => {
-      Notiflix.Notify.success(`Fulfilled promise ${position} in ${delay}ms`);
-    })
-    .catch(({ position, delay }) => {
-      Notiflix.Notify.failure(`Rejected promise ${position} in ${delay}ms`);
-    });
-  time += step;
-  setTimeout(() => showPromise(amount, step, time, current + 1), step);
-};
-
-form.addEventListener('submit', event => {
-  event.preventDefault();
-  const delay = event.currentTarget.elements.delay;
-  const step = event.currentTarget.elements.step;
-  const amount = event.currentTarget.elements.amount;
-  setTimeout(
-    () => showPromise(+amount.value, +step.value, +delay.value),
-    +delay.value
-  );
-});
