@@ -17,12 +17,13 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (selectedDates[0] < new Date()) {
+    if (selectedDates[0] > new Date()) {
+      const date = convertMs(selectedDates[0] - new Date());
+      startBtn.removeAttribute('disabled');
+      updateTimer(date);
+    } else {
       Notiflix.Notify.failure('Please choose a date in the future');
     }
-    selectedDates[0] > new Date() && startBtn.removeAttribute('disabled');
-    const date = convertMs(selectedDates[0] - new Date());
-    updateTimer(date);
   },
 };
 
